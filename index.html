@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>16.1 Chance – Cambridge Primary Math</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ════ TOKENS ════ */
+:root{
+  --coral:#FF6B6B; --teal:#2EC4B6; --yellow:#FFD166;
+  --purple:#9B5DE5; --green:#06D6A0; --blue:#118AB2;
+  --bg:#EEF2FF; --card:#fff; --text:#1A1A2E; --muted:#6B7280;
+  --r:18px; --sh:0 4px 22px rgba(0,0,0,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{height:-webkit-fill-available;font-family:'Nunito',sans-serif;background:var(--bg);}
+body{display:flex;height:100%;min-height:-webkit-fill-available;overflow:hidden;background:var(--bg);color:var(--text);}
+
+/* ════ SIDEBAR ════ */
+#sidebar{
+  width:228px;min-width:228px;flex-shrink:0;
+  background:linear-gradient(175deg,#0f0c29 0%,#1e1b4b 100%);
+  display:flex;flex-direction:column;
+  overflow-y:scroll;overflow-x:hidden;padding-bottom:32px;
+}
+#sbh{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.07);}
+#sbh .lbl{font-family:'Fredoka One',cursive;font-size:10px;letter-spacing:2.5px;color:var(--teal);text-transform:uppercase;margin-bottom:2px;}
+#sbh h2{font-family:'Fredoka One',cursive;font-size:24px;color:#fff;line-height:1.15;}
+#sbh .pg{font-size:11px;color:rgba(255,255,255,.3);margin-top:3px;}
+.pb-w{margin:14px 18px 0;background:rgba(255,255,255,.08);border-radius:30px;height:7px;overflow:hidden;}
+.pb-f{height:100%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:30px;transition:width .55s cubic-bezier(.4,0,.2,1);width:0%;}
+.pb-l{font-size:10px;color:rgba(255,255,255,.28);margin:5px 18px 0;}
+.sg{font-size:9.5px;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.22);padding:22px 18px 7px;}
+.ni{display:flex;align-items:center;gap:10px;padding:12px 18px;cursor:pointer;border-left:3px solid transparent;transition:background .18s,border-color .18s;user-select:none;-webkit-tap-highlight-color:transparent;}
+.ni:hover{background:rgba(255,255,255,.04);}
+.ni.active{background:rgba(46,196,182,.14);border-left-color:var(--teal);}
+.ni .ico{font-size:19px;flex-shrink:0;}
+.ni .tx{flex:1;font-size:13px;font-weight:700;color:rgba(255,255,255,.65);line-height:1.2;}
+.ni.active .tx{color:var(--teal);}
+.ni .ck{font-size:12px;color:var(--green);opacity:0;transition:opacity .3s;}
+.ni.done .ck{opacity:1;}
+
+/* ════ MAIN ════ */
+#main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
+#tb{background:#fff;border-bottom:2px solid rgba(0,0,0,.055);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px;}
+#tb .tt{font-family:'Fredoka One',cursive;font-size:20px;color:var(--blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#tb .bd{background:var(--yellow);color:#333;font-weight:800;font-size:12px;padding:5px 14px;border-radius:30px;white-space:nowrap;flex-shrink:0;}
+#content{flex:1;min-height:0;overflow-y:scroll;overscroll-behavior-y:contain;scroll-behavior:smooth;padding:28px 30px 140px;}
+
+/* ════ SECTION ANIM ════ */
+.sec{display:none;}
+.sec.active{display:block;animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}60%{transform:translateX(7px);}}
+@keyframes popIn{from{transform:scale(0) rotate(-12deg);}to{transform:scale(1) rotate(0);}}
+@keyframes bounceIn{0%{transform:scale(.5);opacity:0;}70%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+
+/* ════ SHARED ════ */
+.sh{font-family:'Fredoka One',cursive;font-size:30px;color:var(--blue);margin-bottom:6px;line-height:1.2;}
+.sub{font-size:15.5px;color:var(--muted);margin-bottom:24px;line-height:1.55;}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:24px;margin-bottom:20px;}
+.btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:16px;padding:13px 28px;border-radius:50px;border:none;cursor:pointer;transition:transform .13s,box-shadow .13s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;line-height:1;}
+.btn:active{transform:scale(.95);}
+.btn-p{background:linear-gradient(135deg,var(--teal),#1aa898);color:#fff;box-shadow:0 5px 18px rgba(46,196,182,.38);}
+.btn-p:hover{box-shadow:0 7px 24px rgba(46,196,182,.52);}
+.btn-s{background:#fff;color:var(--text);border:2px solid #dde3ed;}
+.btn-s:hover{border-color:var(--blue);}
+.btn-r{background:linear-gradient(135deg,#FFD166,#f5b700);color:#333;box-shadow:0 4px 14px rgba(255,209,102,.32);}
+.btn-c{background:linear-gradient(135deg,var(--coral),#e0404f);color:#fff;box-shadow:0 5px 18px rgba(255,107,107,.35);}
+.btn-c:hover{box-shadow:0 7px 24px rgba(255,107,107,.5);}
+.btn-h{background:linear-gradient(135deg,var(--purple),#7a3fc2);color:#fff;box-shadow:0 4px 14px rgba(155,93,229,.3);}
+.nav-btns{display:flex;gap:12px;margin-top:38px;flex-wrap:wrap;}
+.tip{border-radius:14px;padding:16px 20px;font-size:15px;font-weight:700;line-height:1.5;margin-bottom:18px;}
+.tip-b{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border:2px solid var(--blue);color:#1e3a8a;}
+.tip-g{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid var(--green);color:#064e3b;}
+
+/* ════ S1 INTRO ════ */
+.hero{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:var(--r);padding:38px 32px;color:#fff;text-align:center;margin-bottom:22px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,255,255,.07),transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(255,255,255,.05),transparent 50%);pointer-events:none;}
+.hero h1{font-family:'Fredoka One',cursive;font-size:52px;text-shadow:0 3px 12px rgba(0,0,0,.22);margin-bottom:8px;position:relative;}
+.hero p{font-size:18px;opacity:.93;max-width:500px;margin:0 auto;line-height:1.55;position:relative;}
+.trio{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+.tc{flex:1;min-width:160px;border-radius:var(--r);padding:24px 18px;text-align:center;box-shadow:var(--sh);transition:transform .2s;}
+.tc:hover{transform:translateY(-5px);}
+.tc .ie{font-size:46px;display:block;margin-bottom:10px;}
+.tc h3{font-family:'Fredoka One',cursive;font-size:19px;margin-bottom:6px;}
+.tc p{font-size:14px;line-height:1.45;color:rgba(0,0,0,.52);}
+.t-will{background:linear-gradient(135deg,#c3f9e3,#a8eddc);}
+.t-wont{background:linear-gradient(135deg,#ffd4d4,#ffb3b3);}
+.t-might{background:linear-gradient(135deg,#fff3cc,#ffe08a);}
+/* scale */
+.scale-bar{height:24px;border-radius:30px;background:linear-gradient(90deg,#ffd4d4 0%,#fff3cc 50%,#c3f9e3 100%);border:2px solid rgba(0,0,0,.07);margin-bottom:10px;}
+.scale-lbl{display:flex;justify-content:space-between;font-size:13px;font-weight:800;}
+.scale-lbl span:nth-child(1){color:#c0392b;} .scale-lbl span:nth-child(2){color:#e67e22;} .scale-lbl span:nth-child(3){color:#16a085;}
+
+/* ════ S2 KEY WORDS ════ */
+.vg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-bottom:24px;}
+.fc{height:170px;perspective:900px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.fi{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);border-radius:var(--r);}
+.fc.flipped .fi{transform:rotateY(180deg);}
+.ff,.fb{position:absolute;inset:0;border-radius:var(--r);box-shadow:var(--sh);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center;}
+.fb{transform:rotateY(180deg);}
+.ff .fe{font-size:40px;margin-bottom:10px;}
+.ff .fw{font-family:'Fredoka One',cursive;font-size:20px;}
+.fb .fd{font-size:14px;line-height:1.5;font-weight:700;}
+.fb .fex{font-size:12px;margin-top:6px;opacity:.7;font-style:italic;}
+.fh{font-size:10px;opacity:.5;position:absolute;bottom:8px;right:10px;}
+.vc-will .ff,.vc-will .fb{background:linear-gradient(135deg,#43e97b,#38f9d7);color:#0a3d24;}
+.vc-wont .ff,.vc-wont .fb{background:linear-gradient(135deg,#f5576c,#f093fb);color:#fff;}
+.vc-might .ff,.vc-might .fb{background:linear-gradient(135deg,#f6d365,#fda085);color:#3d1a00;}
+.vc-likely .ff,.vc-likely .fb{background:linear-gradient(135deg,#a1c4fd,#c2e9fb);color:#0a2a4a;}
+/* match */
+.mc-cols{display:flex;gap:14px;flex-wrap:wrap;}
+.mc-col{flex:1;min-width:155px;}
+.mc-hd{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted);margin-bottom:10px;}
+.mchip{display:block;width:100%;padding:13px 16px;border-radius:13px;margin-bottom:10px;font-size:14px;font-weight:700;cursor:pointer;border:3px solid transparent;background:#EEF2FF;color:var(--text);transition:all .2s;text-align:left;-webkit-tap-highlight-color:transparent;touch-action:manipulation;font-family:'Nunito',sans-serif;}
+.mchip:hover{border-color:var(--blue);background:#e2eaff;}
+.mchip.sel{border-color:var(--blue);background:#dbeafe;}
+.mchip.ok{background:#d1fae5;border-color:var(--green);color:#064e3b;pointer-events:none;}
+.mchip.bad{background:#fee2e2;border-color:var(--coral);animation:shake .38s;}
+.m-done{display:none;margin-top:14px;background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:3px solid var(--green);border-radius:14px;padding:14px 18px;font-size:16px;font-weight:800;color:#065f46;text-align:center;animation:bounceIn .4s ease;}
+.m-done.show{display:block;}
+
+/* ════ S3 EXAMPLES ════ */
+.ex-row{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:22px;}
+.ex-card{flex:1;min-width:240px;background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:24px;text-align:center;}
+.ex-card h3{font-family:'Fredoka One',cursive;font-size:20px;color:var(--blue);margin-bottom:12px;}
+/* dice */
+.dface{width:90px;height:90px;background:#fff;border-radius:16px;border:3px solid #2d2d2d;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:5px;padding:11px;box-shadow:5px 5px 0 #2d2d2d;cursor:pointer;margin:0 auto 14px;transition:transform .1s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.dface:active{transform:scale(.87) rotate(8deg);}
+.dface.rolling{animation:diceRoll .07s linear infinite;}
+@keyframes diceRoll{0%{transform:rotate(-6deg) scale(.94);}50%{transform:rotate(6deg) scale(1.06);}100%{transform:rotate(-6deg) scale(.94);}}
+.dc{display:flex;align-items:center;justify-content:center;}
+.dot{width:11px;height:11px;background:#1a1a2e;border-radius:50%;}
+.dr{font-family:'Fredoka One',cursive;font-size:26px;color:var(--purple);min-height:36px;margin-bottom:8px;}
+.dh{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:30px;margin-bottom:8px;}
+.hb{width:28px;height:28px;background:var(--purple);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;animation:popIn .2s ease;}
+/* weather */
+.wx-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0;}
+.wx-btn{padding:12px 18px;border-radius:50px;border:3px solid #dde3ed;background:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:7px;}
+.wx-btn:hover{border-color:var(--teal);transform:scale(1.04);}
+.wx-btn.sel{border-color:var(--teal);background:#ccfbf6;}
+.wx-v{background:var(--yellow);border-radius:13px;padding:13px 16px;font-size:15px;font-weight:700;min-height:48px;line-height:1.45;text-align:center;transition:background .25s;}
+
+/* ════ S4 WORKED EXAMPLE ════ */
+.wbox{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:3px solid var(--yellow);border-radius:var(--r);padding:24px;margin-bottom:20px;}
+.w-badge{font-family:'Fredoka One',cursive;font-size:13px;background:var(--coral);color:#fff;display:inline-block;padding:5px 16px;border-radius:30px;margin-bottom:12px;}
+.w-q{font-size:17px;font-weight:700;color:var(--blue);line-height:1.55;margin-bottom:18px;}
+.step-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.stp{border-radius:13px;padding:16px 18px;font-size:15.5px;font-weight:700;line-height:1.5;margin-top:14px;display:none;animation:fadeUp .3s ease;}
+.stp.show{display:block;}
+.stp-think{background:#ede9fe;border:3px solid var(--purple);color:#3b0764;}
+.stp-ans{background:#fef3c7;border:3px solid var(--yellow);color:#78350f;}
+
+/* ════ DOMINOS (shared) ════ */
+.dom-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:18px 0;}
+.dw{display:flex;flex-direction:column;align-items:center;}
+.domino{width:58px;background:#F5E6C8;border-radius:9px;border:2.5px solid #C8A96E;box-shadow:2px 3px 0 rgba(0,0,0,.16);display:flex;flex-direction:column;align-items:center;overflow:hidden;transition:transform .18s,box-shadow .18s;}
+.domino:hover{transform:scale(1.07);}
+.domino.hl-r{border-color:var(--coral);box-shadow:0 0 0 3px rgba(255,107,107,.35);}
+.domino.hl-g{border-color:var(--green);box-shadow:0 0 0 3px rgba(6,214,160,.35);}
+.dh2{width:100%;height:58px;display:flex;align-items:center;justify-content:center;padding:7px;}
+.ddiv{width:82%;height:2px;background:#C8A96E;flex-shrink:0;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:2px;width:38px;height:38px;}
+.dcell{display:flex;align-items:center;justify-content:center;}
+.ddot{width:9px;height:9px;background:#2D1B00;border-radius:50%;flex-shrink:0;}
+.dback{width:100%;height:116px;background:repeating-linear-gradient(45deg,#C8A96E,#C8A96E 4px,#F5E6C8 4px,#F5E6C8 13px);border-radius:7px;}
+.dlbl{font-size:11px;font-weight:800;text-align:center;margin-top:5px;color:var(--muted);min-height:16px;transition:color .2s;}
+.dlbl.over8{color:var(--coral);}
+
+/* ════ S5 ACTIVITY ════ */
+.act-q{background:linear-gradient(135deg,rgba(102,126,234,.1),rgba(118,75,162,.07));border:2.5px dashed var(--purple);border-radius:var(--r);padding:18px 20px;margin-bottom:22px;font-size:16px;font-weight:700;color:var(--purple);line-height:1.55;}
+.ch-row{display:flex;gap:13px;flex-wrap:wrap;margin:18px 0;}
+.ch-btn{flex:1;min-width:148px;padding:18px 14px;border-radius:var(--r);border:3px solid #dde3ed;background:#fff;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;transition:all .2s;text-align:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.ch-btn:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:var(--blue);}
+.ch-btn.sel{border-color:var(--blue);background:#dbeafe;}
+.ch-btn.correct{border-color:var(--green);background:#d1fae5;color:#065f46;pointer-events:none;}
+.ch-btn.wrong{border-color:var(--coral);background:#fee2e2;color:#7f1d1d;pointer-events:none;animation:shake .4s;}
+.fbx{border-radius:13px;padding:16px 20px;font-size:15.5px;font-weight:700;margin-top:14px;line-height:1.5;display:none;}
+.fbx.show{display:block;animation:fadeUp .3s ease;}
+.fbx.ok{background:#d1fae5;border:3px solid var(--green);color:#064e3b;}
+.fbx.bad{background:#fee2e2;border:3px solid var(--coral);color:#7f1d1d;}
+.fbx.warn{background:#fef3c7;border:3px solid var(--yellow);color:#78350f;}
+
+/* ════ S6 QUIZ ════ */
+.qw{margin-bottom:30px;}
+.qrow{font-size:16.5px;font-weight:800;color:var(--text);margin-bottom:13px;line-height:1.5;display:flex;gap:11px;align-items:flex-start;}
+.qnum{background:var(--purple);color:#fff;font-family:'Fredoka One',cursive;font-size:15px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.qopts{display:flex;flex-direction:column;gap:10px;padding-left:41px;}
+.qopt{padding:13px 18px;border-radius:13px;border:3px solid #e5e7eb;background:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .18s;text-align:left;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.qopt:hover{border-color:var(--blue);background:#f0f7ff;}
+.qopt.sel{border-color:var(--blue);background:#dbeafe;}
+.qopt.ok{border-color:var(--green);background:#d1fae5;color:#065f46;pointer-events:none;}
+.qopt.bad{border-color:var(--coral);background:#fee2e2;color:#7f1d1d;pointer-events:none;animation:shake .4s;}
+.qopt.show-ok{border-color:var(--green);background:#d1fae5;color:#065f46;}
+.qfb{font-size:13.5px;font-weight:700;padding-left:41px;min-height:20px;margin-top:7px;color:var(--muted);}
+.qfb.ok{color:#065f46;} .qfb.bad{color:#991b1b;}
+/* score */
+.sc{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:var(--r);padding:32px;text-align:center;color:#fff;display:none;}
+.sc.show{display:block;animation:bounceIn .5s ease;}
+.sc-e{font-size:64px;display:block;margin-bottom:10px;}
+.sc h3{font-family:'Fredoka One',cursive;font-size:32px;margin-bottom:8px;}
+.sc p{font-size:17px;opacity:.93;}
+.sc-stars{font-size:32px;margin:10px 0;letter-spacing:4px;}
+
+/* ════ CONFETTI ════ */
+#cc{position:fixed;inset:0;pointer-events:none;z-index:9999;display:none;}
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:620px){
+  #sidebar{width:68px;min-width:68px;}
+  .pb-w,.pb-l,#sbh .lbl,#sbh h2,#sbh .pg,.sg,.tx,.ck{display:none;}
+  .ico{font-size:22px;}
+  .ni{justify-content:center;padding:14px 8px;}
+  #content{padding:16px 14px 120px;}
+  .hero h1{font-size:36px;}
+  .trio{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="cc"></canvas>
+
+<!-- ════ SIDEBAR ════ -->
+<nav id="sidebar">
+  <div id="sbh">
+    <div class="lbl">Unit 16 · Math</div>
+    <h2>🎲 Chance</h2>
+    <div class="pg">Cambridge Primary · pp. 250–251</div>
+  </div>
+  <div class="pb-w"><div class="pb-f" id="pbf"></div></div>
+  <div class="pb-l" id="pbl">1 / 6 sections</div>
+  <div class="sg">Lesson</div>
+  <div class="ni active" data-s="s1" onclick="goSec('s1')"><span class="ico">🌟</span><span class="tx">What is Chance?</span><span class="ck">✓</span></div>
+  <div class="ni" data-s="s2" onclick="goSec('s2')"><span class="ico">📖</span><span class="tx">Key Words</span><span class="ck">✓</span></div>
+  <div class="ni" data-s="s3" onclick="goSec('s3')"><span class="ico">🎲</span><span class="tx">Examples</span><span class="ck">✓</span></div>
+  <div class="ni" data-s="s4" onclick="goSec('s4')"><span class="ico">🧩</span><span class="tx">Worked Example</span><span class="ck">✓</span></div>
+  <div class="ni" data-s="s5" onclick="goSec('s5')"><span class="ico">🎮</span><span class="tx">Your Turn!</span><span class="ck">✓</span></div>
+  <div class="ni" data-s="s6" onclick="goSec('s6')"><span class="ico">⭐</span><span class="tx">Quick Quiz</span><span class="ck">✓</span></div>
+</nav>
+
+<!-- ════ MAIN ════ -->
+<div id="main">
+  <div id="tb">
+    <span class="tt" id="tbt">🌟 What is Chance?</span>
+    <span class="bd">Grade 3 · 40 min</span>
+  </div>
+  <div id="content">
+
+  <!-- ══ S1: INTRO ══ -->
+  <section class="sec active" id="s1">
+    <div class="hero">
+      <h1>🎲 Chance!</h1>
+      <p>Some things <strong>will</strong> happen, some things <strong>won't</strong> happen, and some things <strong>might</strong> happen.</p>
+    </div>
+
+    <div class="trio">
+      <div class="tc t-will"><span class="ie">✅</span><h3>Will Happen</h3><p>We are <strong>certain</strong> it will happen. It cannot miss!</p></div>
+      <div class="tc t-wont"><span class="ie">❌</span><h3>Won't Happen</h3><p>It is <strong>impossible</strong>. There is no way it can happen.</p></div>
+      <div class="tc t-might"><span class="ie">🤔</span><h3>Might Happen</h3><p>We are <strong>not sure</strong>. It could happen or it might not!</p></div>
+    </div>
+
+    <div class="card">
+      <p style="font-family:'Fredoka One',cursive;font-size:17px;color:var(--blue);margin-bottom:12px;">📊 The Chance Scale</p>
+      <div class="scale-bar"></div>
+      <div class="scale-lbl"><span>❌ Impossible</span><span>🤔 Might Happen</span><span>✅ Certain</span></div>
+      <p style="font-size:14px;color:var(--muted);margin-top:12px;line-height:1.5;">Chance goes from <strong>impossible</strong> all the way to <strong>certain</strong>. Most events fall somewhere in between!</p>
+    </div>
+
+    <div class="tip tip-b">💡 <strong>Did you know?</strong> Knowing about chance helps us make better decisions! If you know it <em>might</em> rain, you bring an umbrella ☔</div>
+
+    <div class="nav-btns">
+      <button class="btn btn-p" onclick="goSec('s2')">Next: Key Words →</button>
+    </div>
+  </section>
+
+  <!-- ══ S2: KEY WORDS ══ -->
+  <section class="sec" id="s2">
+    <div class="sh">📖 Key Words</div>
+    <p class="sub">Tap each card to flip it and see the definition!</p>
+
+    <div class="vg">
+      <div class="fc vc-will" onclick="flipCard(this)">
+        <div class="fi">
+          <div class="ff"><span class="fe">✅</span><span class="fw">Will Happen</span><span class="fh">tap to flip ↺</span></div>
+          <div class="fb"><span class="fd">Certain to happen — we know it will!</span><span class="fex">Example: The sun will rise tomorrow.</span><span class="fh">tap to flip ↺</span></div>
+        </div>
+      </div>
+      <div class="fc vc-wont" onclick="flipCard(this)">
+        <div class="fi">
+          <div class="ff"><span class="fe">❌</span><span class="fw">Won't Happen</span><span class="fh" style="color:rgba(255,255,255,.4)">tap to flip ↺</span></div>
+          <div class="fb"><span class="fd">Impossible — there is no way it can happen!</span><span class="fex">Example: A cat won't fly through the sky.</span><span class="fh" style="color:rgba(255,255,255,.4)">tap to flip ↺</span></div>
+        </div>
+      </div>
+      <div class="fc vc-might" onclick="flipCard(this)">
+        <div class="fi">
+          <div class="ff"><span class="fe">🤔</span><span class="fw">Might Happen</span><span class="fh">tap to flip ↺</span></div>
+          <div class="fb"><span class="fd">Maybe yes, maybe no — we are not sure!</span><span class="fex">Example: It might rain this afternoon.</span><span class="fh">tap to flip ↺</span></div>
+        </div>
+      </div>
+      <div class="fc vc-likely" onclick="flipCard(this)">
+        <div class="fi">
+          <div class="ff"><span class="fe">⚖️</span><span class="fw">Chance / Likely</span><span class="fh">tap to flip ↺</span></div>
+          <div class="fb"><span class="fd">How probable something is. High chance = very likely!</span><span class="fex">Example: There is a good chance of rain today.</span><span class="fh">tap to flip ↺</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Match activity -->
+    <div class="card">
+      <p style="font-family:'Fredoka One',cursive;font-size:20px;color:var(--blue);margin-bottom:10px;">🎯 Match It!</p>
+      <p style="font-size:15px;color:var(--muted);margin-bottom:14px;font-weight:700;">Tap a sentence, then tap the correct chance word to match them.</p>
+      <div class="mc-cols">
+        <div class="mc-col">
+          <div class="mc-hd">Sentence</div>
+          <button class="mchip" data-ans="will"  onclick="mSent(this)">🌅 The sun comes up every morning.</button>
+          <button class="mchip" data-ans="wont"  onclick="mSent(this)">🐟 A fish will walk to school today.</button>
+          <button class="mchip" data-ans="might" onclick="mSent(this)">🌧️ It could rain after lunch.</button>
+        </div>
+        <div class="mc-col">
+          <div class="mc-hd">Chance Word</div>
+          <button class="mchip" data-word="will"  onclick="mWord(this)">✅ Will Happen</button>
+          <button class="mchip" data-word="wont"  onclick="mWord(this)">❌ Won't Happen</button>
+          <button class="mchip" data-word="might" onclick="mWord(this)">🤔 Might Happen</button>
+        </div>
+      </div>
+      <div class="m-done" id="mDone">🎉 All matched! Excellent! You know your chance words!</div>
+      <div class="nav-btns" style="margin-top:14px;">
+        <button class="btn btn-r" onclick="resetMatch()">🔄 Reset</button>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-s" onclick="goSec('s1')">← Back</button>
+      <button class="btn btn-p" onclick="goSec('s3')">Next: Examples →</button>
+    </div>
+  </section>
+
+  <!-- ══ S3: EXAMPLES ══ -->
+  <section class="sec" id="s3">
+    <div class="sh">🎲 Real-Life Examples</div>
+    <p class="sub">Chance is everywhere! Let's look at two examples from the book.</p>
+
+    <div class="ex-row">
+      <!-- DICE -->
+      <div class="ex-card">
+        <h3>🎲 Six-Sided Dice</h3>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.5;">When you roll a dice you will get a <strong>1, 2, 3, 4, 5</strong> or <strong>6</strong>. You will <em>never</em> get a 7!</p>
+        <div class="dface" id="diceEl" onclick="rollDice()">
+          <div class="dc" id="dc1"></div><div class="dc" id="dc2"></div><div class="dc" id="dc3"></div>
+          <div class="dc" id="dc4"></div><div class="dc" id="dc5"></div><div class="dc" id="dc6"></div>
+          <div class="dc" id="dc7"></div><div class="dc" id="dc8"></div><div class="dc" id="dc9"></div>
+        </div>
+        <div class="dr" id="diceRes">Tap to roll! 👆</div>
+        <div class="dh" id="diceH"></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;" id="diceCount"></div>
+        <button class="btn btn-r" style="font-size:13px;padding:9px 18px;" onclick="resetDice()">🔄 Reset</button>
+      </div>
+
+      <!-- WEATHER -->
+      <div class="ex-card">
+        <h3>🌤️ Tomorrow's Weather</h3>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:6px;line-height:1.5;">We don't know exactly what the weather will be. What do you think?</p>
+        <div class="wx-row">
+          <button class="wx-btn" onclick="pickWx(this,'☀️ Sunny — it <strong>might</strong> happen! We cannot be certain.')">☀️ Sunny</button>
+          <button class="wx-btn" onclick="pickWx(this,'🌧️ Rainy — it <strong>might</strong> happen! We cannot be certain.')">🌧️ Rainy</button>
+          <button class="wx-btn" onclick="pickWx(this,'⛅ Cloudy — it <strong>might</strong> happen! We cannot be certain.')">⛅ Cloudy</button>
+          <button class="wx-btn" onclick="pickWx(this,'❄️ Snowy — it <strong>might</strong> happen in cold places!')">❄️ Snowy</button>
+        </div>
+        <div class="wx-v" id="wxV">Choose a weather option above!</div>
+        <br>
+        <button class="btn btn-r" style="font-size:13px;padding:9px 18px;" onclick="resetWx()">🔄 Reset</button>
+        <div class="tip tip-b" style="margin-top:14px;padding:12px 14px;font-size:13px;">
+          ⚡ Weather is a great example of <strong>chance</strong> — we cannot be 100% sure what it will be!
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-s" onclick="goSec('s2')">← Back</button>
+      <button class="btn btn-p" onclick="goSec('s4')">Next: Worked Example →</button>
+    </div>
+  </section>
+
+  <!-- ══ S4: WORKED EXAMPLE ══ -->
+  <section class="sec" id="s4">
+    <div class="sh">🧩 Worked Example</div>
+    <p class="sub">Let's work through this together — step by step!</p>
+
+    <div class="wbox">
+      <span class="w-badge">📚 Worked Example 1</span>
+      <div class="w-q">
+        You have <strong>six dominoes</strong> lying <em>face down</em> on the table.<br>
+        What is the chance you will turn over a domino with a <strong>total of six spots</strong>?<br>
+        <span style="color:var(--purple);">Will it happen? Won't it happen? Or might it happen?</span>
+      </div>
+      <p style="font-size:13px;font-weight:700;color:var(--muted);text-align:center;margin-bottom:4px;">The dominoes are face DOWN — we cannot see the spots!</p>
+      <div class="dom-row" id="workedRow"></div>
+      <div class="step-btns">
+        <button class="btn btn-h" onclick="showStep('think')" id="btn-think">🤔 Think About It…</button>
+        <button class="btn btn-c" onclick="showStep('ans')" id="btn-ans" style="display:none;">💡 Reveal Answer</button>
+        <button class="btn btn-r" onclick="resetWorked()">🔄 Try Again</button>
+      </div>
+      <div class="stp stp-think" id="stp-think">🤔 <strong>Think:</strong> We cannot see the faces of the dominoes. We don't know how many spots each one has. Can we be <em>certain</em> there is one with six spots?</div>
+      <div class="stp stp-ans" id="stp-ans">
+        🎯 <strong>Answer: Might happen!</strong><br>
+        Because the dominoes are face down, we cannot see their spots. There <em>might</em> be a domino with 6 spots — or there might not. We cannot be certain either way!
+        <div style="margin-top:10px;font-size:14px;font-weight:700;color:#78350f;">👉 Key rule: If we <strong>cannot see</strong> the items, the answer is usually <em>"might happen."</em></div>
+      </div>
+    </div>
+
+    <div class="tip tip-g">💡 <strong>Remember:</strong> Hidden items → uncertain outcome → <strong>"Might happen."</strong> When you CAN see all the items, you can make a more certain judgement!</div>
+
+    <div class="nav-btns">
+      <button class="btn btn-s" onclick="goSec('s3')">← Back</button>
+      <button class="btn btn-p" onclick="goSec('s5')">Next: Your Turn! →</button>
+    </div>
+  </section>
+
+  <!-- ══ S5: YOUR TURN ══ -->
+  <section class="sec" id="s5">
+    <div class="sh">🎮 Your Turn!</div>
+    <p class="sub">Now you try it — just like Exercise 16.1 from the book!</p>
+
+    <div class="act-q">
+      📌 <strong>Question 1:</strong> You have these <strong>six dominoes</strong> in a bag. What is the chance that if you take out one domino, the <strong>total number of spots is more than 8</strong>?<br>
+      <span style="font-size:13px;opacity:.8;">Draw a ring around the answer.</span>
+    </div>
+
+    <div class="card" style="padding:20px;">
+      <p style="font-size:14px;font-weight:700;color:var(--muted);text-align:center;margin-bottom:10px;">You CAN see these dominoes — tap one to count its spots! 👇</p>
+      <div class="dom-row" id="actRow"></div>
+      <div id="actHint2" style="text-align:center;font-size:13px;font-weight:700;color:var(--muted);min-height:20px;margin-top:6px;"></div>
+      <div style="text-align:center;margin-top:12px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-h" style="font-size:13px;padding:9px 20px;" onclick="showActHint()">💡 Hint</button>
+        <button class="btn btn-r" style="font-size:13px;padding:9px 18px;" onclick="resetAct()">🔄 Reset</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <p style="font-size:16px;font-weight:800;margin-bottom:4px;">What is the chance? Tap your answer:</p>
+      <div class="ch-row">
+        <button class="ch-btn" onclick="pickAns(this,'will')">✅ It will happen.</button>
+        <button class="ch-btn" onclick="pickAns(this,'might')">🤔 It might happen.</button>
+        <button class="ch-btn" onclick="pickAns(this,'wont')">❌ It won't happen.</button>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+        <button class="btn btn-c" onclick="checkAns()">✔ Check My Answer</button>
+        <button class="btn btn-r" onclick="resetAct()">🔄 Try Again</button>
+      </div>
+      <div class="fbx" id="actFb"></div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-s" onclick="goSec('s4')">← Back</button>
+      <button class="btn btn-p" onclick="goSec('s6')">Next: Quick Quiz →</button>
+    </div>
+  </section>
+
+  <!-- ══ S6: QUIZ ══ -->
+  <section class="sec" id="s6">
+    <div class="sh">⭐ Quick Quiz</div>
+    <p class="sub">Let's see what you have learned! Answer all 4 questions, then check your score.</p>
+
+    <div class="qw">
+      <div class="qrow"><span class="qnum">1</span>You roll a six-sided dice. What is the chance you will get the number 3?</div>
+      <div class="qopts" id="q1o">
+        <button class="qopt" onclick="qPick(this,'q1','w')">✅ It will happen — there is always a 3!</button>
+        <button class="qopt" onclick="qPick(this,'q1','c')">🤔 It might happen — you could get any number 1–6.</button>
+        <button class="qopt" onclick="qPick(this,'q1','w')">❌ It won't happen — dice don't show 3.</button>
+      </div>
+      <div class="qfb" id="q1f"></div>
+    </div>
+
+    <div class="qw">
+      <div class="qrow"><span class="qnum">2</span>The sun rises every morning. What is the chance the sun will rise tomorrow?</div>
+      <div class="qopts" id="q2o">
+        <button class="qopt" onclick="qPick(this,'q2','c')">✅ It will happen — the sun always rises.</button>
+        <button class="qopt" onclick="qPick(this,'q2','w')">🤔 It might happen — we are not sure.</button>
+        <button class="qopt" onclick="qPick(this,'q2','w')">❌ It won't happen — it could stay dark.</button>
+      </div>
+      <div class="qfb" id="q2f"></div>
+    </div>
+
+    <div class="qw">
+      <div class="qrow"><span class="qnum">3</span>A dog speaks English to you at school. What is the chance?</div>
+      <div class="qopts" id="q3o">
+        <button class="qopt" onclick="qPick(this,'q3','w')">✅ It will happen — dogs are very clever!</button>
+        <button class="qopt" onclick="qPick(this,'q3','w')">🤔 It might happen — some dogs are smart.</button>
+        <button class="qopt" onclick="qPick(this,'q3','c')">❌ It won't happen — dogs cannot speak English.</button>
+      </div>
+      <div class="qfb" id="q3f"></div>
+    </div>
+
+    <div class="qw">
+      <div class="qrow"><span class="qnum">4</span>A bag has 10 balls: 8 red and 2 blue. You pick one without looking. What is the chance of picking a blue ball?</div>
+      <div class="qopts" id="q4o">
+        <button class="qopt" onclick="qPick(this,'q4','w')">✅ It will happen — there are blue balls in the bag!</button>
+        <button class="qopt" onclick="qPick(this,'q4','c')">🤔 It might happen — there are some blue balls but not many.</button>
+        <button class="qopt" onclick="qPick(this,'q4','w')">❌ It won't happen — most balls are red.</button>
+      </div>
+      <div class="qfb" id="q4f"></div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px;">
+      <button class="btn btn-c" onclick="submitQuiz()">⭐ See My Score!</button>
+      <button class="btn btn-r" onclick="resetQuiz()">🔄 Try Again</button>
+    </div>
+
+    <div class="sc" id="scoreCard">
+      <span class="sc-e" id="scE">🎉</span>
+      <div class="sc-stars" id="scStars"></div>
+      <h3 id="scH">Well done!</h3>
+      <p id="scP">You scored 4 out of 4!</p>
+      <button class="btn btn-s" style="margin-top:20px;" onclick="resetQuiz()">🔄 Try Again</button>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn btn-s" onclick="goSec('s5')">← Back</button>
+      <button class="btn btn-p" onclick="goSec('s1')">🔁 Start Again</button>
+    </div>
+  </section>
+
+  </div><!-- #content -->
+</div><!-- #main -->
+
+<script>
+(function(){
+'use strict';
+
+/* ── STATE ── */
+const ST={
+  cur:'s1', visited:new Set(['s1']), total:6,
+  dice:{rolling:false,rolls:[]},
+  match:{sent:null,word:null,done:0},
+  worked:{step:0},
+  act:{sel:null,checked:false},
+  quiz:{ans:{},submitted:false}
+};
+
+const TITLES={s1:'🌟 What is Chance?',s2:'📖 Key Words',s3:'🎲 Examples',s4:'🧩 Worked Example',s5:'🎮 Your Turn!',s6:'⭐ Quick Quiz'};
+
+/* ── DOT PATTERNS ── */
+const DP={0:[],1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};
+
+function dotHalf(n){
+  let h='';
+  for(let i=1;i<=9;i++) h+=`<div class="dcell">${DP[n].includes(i)?'<div class="ddot"></div>':''}</div>`;
+  return `<div class="dgrid">${h}</div>`;
+}
+
+function mkDom(a,b,opts){
+  opts=opts||{};
+  const oc=opts.oc?` onclick="${opts.oc}"`:'';
+  const cur=opts.oc?' style="cursor:pointer"':'';
+  return `<div class="dw">
+    <div class="domino"${oc}${cur}>
+      <div class="dh2">${dotHalf(a)}</div>
+      <div class="ddiv"></div>
+      <div class="dh2">${dotHalf(b)}</div>
+    </div>
+    <div class="dlbl" id="${opts.lid||''}"></div>
+  </div>`;
+}
+
+function mkBack(){return `<div class="dw"><div class="domino"><div class="dback"></div></div></div>`;}
+
+/* Activity dominos [a,b]: totals 2,4,5,6,8,9 */
+const ADOMS=[[0,2],[1,3],[2,3],[3,3],[4,4],[4,5]];
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',function(){
+  const wr=document.getElementById('workedRow');
+  if(wr){let h='';for(let i=0;i<6;i++)h+=mkBack();wr.innerHTML=h;}
+  buildAct();
+  renderDice(1);
+  updateNav();
+});
+
+function buildAct(){
+  const el=document.getElementById('actRow');
+  if(!el)return;
+  let h='';
+  ADOMS.forEach(function(p,i){h+=mkDom(p[0],p[1],{oc:`tapDom(${i},${p[0]+p[1]})`,lid:`ad${i}`});});
+  el.innerHTML=h;
+}
+
+/* ── NAVIGATION ── */
+window.goSec=function(id){
+  document.getElementById(ST.cur).classList.remove('active');
+  document.querySelector(`.ni[data-s="${ST.cur}"]`).classList.remove('active');
+  ST.visited.add(id); ST.cur=id;
+  document.getElementById(id).classList.add('active');
+  const ni=document.querySelector(`.ni[data-s="${id}"]`);
+  ni.classList.add('active','done');
+  document.getElementById('tbt').textContent=TITLES[id]||'';
+  document.getElementById('content').scrollTop=0;
+  updateNav();
+};
+
+function updateNav(){
+  const pct=Math.round(ST.visited.size/ST.total*100);
+  document.getElementById('pbf').style.width=pct+'%';
+  document.getElementById('pbl').textContent=ST.visited.size+' / '+ST.total+' sections';
+  ST.visited.forEach(function(s){document.querySelector(`.ni[data-s="${s}"]`).classList.add('done');});
+}
+
+/* ── FLIP CARDS ── */
+window.flipCard=function(c){c.classList.toggle('flipped');};
+
+/* ── MATCH ── */
+window.mSent=function(el){
+  if(el.classList.contains('ok'))return;
+  document.querySelectorAll('.mchip[data-ans]').forEach(function(c){if(!c.classList.contains('ok'))c.classList.remove('sel');});
+  el.classList.add('sel'); ST.match.sent=el; doMatch();
+};
+window.mWord=function(el){
+  if(el.classList.contains('ok'))return;
+  document.querySelectorAll('.mchip[data-word]').forEach(function(c){if(!c.classList.contains('ok'))c.classList.remove('sel');});
+  el.classList.add('sel'); ST.match.word=el; doMatch();
+};
+function doMatch(){
+  const s=ST.match.sent,w=ST.match.word;
+  if(!s||!w)return;
+  if(s.dataset.ans===w.dataset.word){
+    s.classList.remove('sel');s.classList.add('ok');
+    w.classList.remove('sel');w.classList.add('ok');
+    ST.match.done++;
+    if(ST.match.done===3)document.getElementById('mDone').classList.add('show');
+  }else{
+    s.classList.add('bad');w.classList.add('bad');
+    setTimeout(function(){s.classList.remove('bad','sel');w.classList.remove('bad','sel');},550);
+  }
+  ST.match.sent=null;ST.match.word=null;
+}
+window.resetMatch=function(){
+  document.querySelectorAll('.mchip').forEach(function(c){c.classList.remove('sel','ok','bad');});
+  document.getElementById('mDone').classList.remove('show');
+  ST.match={sent:null,word:null,done:0};
+};
+
+/* ── DICE ── */
+const DPATS={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,2,3,7,8,9]};
+const DNAMES=['','One','Two','Three','Four','Five','Six'];
+
+function renderDice(n){
+  for(let i=1;i<=9;i++){
+    const c=document.getElementById('dc'+i);
+    if(c)c.innerHTML=DPATS[n].includes(i)?'<div class="dot"></div>':'';
+  }
+}
+
+window.rollDice=function(){
+  if(ST.dice.rolling)return;
+  ST.dice.rolling=true;
+  const el=document.getElementById('diceEl');
+  el.classList.add('rolling');
+  let count=0;
+  const spin=setInterval(function(){
+    renderDice(Math.floor(Math.random()*6)+1);
+    count++;
+    if(count>=12){
+      clearInterval(spin);
+      const f=Math.floor(Math.random()*6)+1;
+      renderDice(f); el.classList.remove('rolling');
+      ST.dice.rolling=false; ST.dice.rolls.push(f);
+      document.getElementById('diceRes').textContent='🎲 You rolled: '+f+' ('+DNAMES[f]+')';
+      document.getElementById('diceCount').textContent='Total rolls: '+ST.dice.rolls.length;
+      const hist=document.getElementById('diceH');
+      const b=document.createElement('div');
+      b.className='hb'; b.textContent=f; hist.appendChild(b);
+    }
+  },70);
+};
+
+window.resetDice=function(){
+  ST.dice={rolling:false,rolls:[]};
+  renderDice(1);
+  document.getElementById('diceRes').textContent='Tap to roll! 👆';
+  document.getElementById('diceH').innerHTML='';
+  document.getElementById('diceCount').textContent='';
+};
+
+/* ── WEATHER ── */
+window.pickWx=function(btn,msg){
+  document.querySelectorAll('.wx-btn').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel');
+  document.getElementById('wxV').innerHTML=msg;
+};
+window.resetWx=function(){
+  document.querySelectorAll('.wx-btn').forEach(function(b){b.classList.remove('sel');});
+  document.getElementById('wxV').textContent='Choose a weather option above!';
+};
+
+/* ── WORKED EXAMPLE ── */
+window.showStep=function(s){
+  if(s==='think'){
+    document.getElementById('stp-think').classList.add('show');
+    document.getElementById('btn-ans').style.display='inline-block';
+    document.getElementById('btn-think').style.display='none';
+  }else{
+    document.getElementById('stp-ans').classList.add('show');
+  }
+};
+window.resetWorked=function(){
+  document.getElementById('stp-think').classList.remove('show');
+  document.getElementById('stp-ans').classList.remove('show');
+  document.getElementById('btn-think').style.display='inline-block';
+  document.getElementById('btn-ans').style.display='none';
+};
+
+/* ── ACTIVITY DOMINO TAP ── */
+window.tapDom=function(idx,tot){
+  const lbl=document.getElementById('ad'+idx);
+  if(!lbl)return;
+  const dom=lbl.previousElementSibling;
+  if(lbl.textContent){
+    lbl.textContent=''; lbl.className='dlbl';
+    if(dom){dom.classList.remove('hl-r','hl-g');}
+  }else{
+    const over=tot>8;
+    lbl.textContent='Total: '+tot+(over?' ⬆️ Over 8!':'');
+    lbl.className='dlbl'+(over?' over8':'');
+    if(dom)dom.classList.add(over?'hl-r':'hl-g');
+  }
+};
+
+window.showActHint=function(){
+  document.getElementById('actHint2').textContent='💡 Hint: Count the dots on EACH domino. Which ones have MORE than 8 total? How many?';
+};
+
+/* ── ACTIVITY ANSWER ── */
+window.pickAns=function(btn,val){
+  if(ST.act.checked)return;
+  document.querySelectorAll('.ch-btn').forEach(function(b){b.classList.remove('sel');});
+  btn.classList.add('sel'); ST.act.sel=val;
+};
+
+window.checkAns=function(){
+  const fb=document.getElementById('actFb');
+  if(!ST.act.sel){fb.className='fbx show warn';fb.textContent='⚠️ Please choose an answer first!';return;}
+  if(ST.act.checked)return;
+  ST.act.checked=true;
+  const C='might',ch=ST.act.sel;
+  document.querySelectorAll('.ch-btn').forEach(function(b){
+    b.classList.remove('sel');
+    const oc=b.getAttribute('onclick')||'';
+    if(oc.includes("'"+C+"'"))b.classList.add('correct');
+    else if(oc.includes("'"+ch+"'")&&ch!==C)b.classList.add('wrong');
+  });
+  /* reveal all totals */
+  ADOMS.forEach(function(p,i){
+    const tot=p[0]+p[1],over=tot>8;
+    const lbl=document.getElementById('ad'+i);
+    const dom=lbl?lbl.previousElementSibling:null;
+    if(lbl){lbl.textContent='Total: '+tot+(over?' ⬆️ Over 8!':'');lbl.className='dlbl'+(over?' over8':'');}
+    if(dom){dom.classList.remove('hl-r','hl-g');dom.classList.add(over?'hl-r':'hl-g');}
+  });
+  if(ch===C){
+    fb.className='fbx show ok';
+    fb.innerHTML='🎉 <strong>Correct!</strong> The answer is <strong>"It might happen."</strong><br>5 out of 6 dominoes have 8 spots or fewer. But the last domino (4+5 = <strong>9 spots</strong>) is more than 8! Because only <em>one</em> domino qualifies, it <strong>might</strong> happen — not will or won\'t!';
+  }else{
+    fb.className='fbx show bad';
+    fb.innerHTML='🤔 <strong>Not quite.</strong> The last domino has 4+5 = <strong>9 spots</strong> (more than 8!), but the other five do not. So it <em>could</em> happen — making the answer <strong>"It might happen."</strong>';
+  }
+};
+
+window.resetAct=function(){
+  ST.act={sel:null,checked:false};
+  document.querySelectorAll('.ch-btn').forEach(function(b){b.classList.remove('sel','correct','wrong');});
+  const fb=document.getElementById('actFb'); fb.className='fbx'; fb.textContent='';
+  document.getElementById('actHint2').textContent='';
+  buildAct();
+};
+
+/* ── QUIZ ── */
+window.qPick=function(btn,qid,res){
+  if(ST.quiz.submitted)return;
+  document.querySelectorAll('#'+qid+'o .qopt').forEach(function(o){o.classList.remove('sel');});
+  btn.classList.add('sel'); ST.quiz.ans[qid]=res;
+};
+
+window.submitQuiz=function(){
+  if(ST.quiz.submitted)return;
+  const qids=['q1','q2','q3','q4'];
+  if(!qids.every(function(q){return !!ST.quiz.ans[q];})){
+    const w=document.getElementById('qWarn');
+    if(!w){
+      const d=document.createElement('div');
+      d.id='qWarn'; d.className='fbx show warn'; d.style.marginBottom='12px';
+      d.textContent='⚠️ Please answer all 4 questions first!';
+      document.getElementById('scoreCard').before(d);
+      setTimeout(function(){if(d.parentNode)d.remove();},2800);
+    }
+    return;
+  }
+  ST.quiz.submitted=true;
+  let score=0;
+  qids.forEach(function(qid){
+    const res=ST.quiz.ans[qid];
+    if(res==='c')score++;
+    const fb=document.getElementById(qid+'f');
+    document.querySelectorAll('#'+qid+'o .qopt').forEach(function(o){
+      if(o.classList.contains('sel')){
+        o.classList.remove('sel');
+        o.classList.add(res==='c'?'ok':'bad');
+      }
+      if(res!=='c'&&(o.getAttribute('onclick')||'').includes(",'c')"))o.classList.add('show-ok');
+    });
+    fb.className='qfb '+(res==='c'?'ok':'bad');
+    fb.textContent=res==='c'?'✅ Correct! Well done!':'❌ Not quite — the correct answer is highlighted in green.';
+  });
+  const card=document.getElementById('scoreCard');
+  document.getElementById('scE').textContent=score===4?'🏆':score>=2?'⭐':'💪';
+  document.getElementById('scStars').textContent='⭐'.repeat(score)+'☆'.repeat(4-score);
+  document.getElementById('scH').textContent=score===4?'Amazing! Perfect Score!':score>=2?'Great effort!':'Keep going!';
+  document.getElementById('scP').textContent=score===4?'You scored 4 out of 4! You are a Chance expert! 🎉':'You scored '+score+' out of 4! '+(score>=2?'Review and try again!':'Read the lesson again — you can do it!');
+  card.classList.add('show');
+  if(score===4)launchConfetti();
+  setTimeout(function(){document.getElementById('content').scrollBy({top:320,behavior:'smooth'});},200);
+};
+
+window.resetQuiz=function(){
+  ST.quiz={ans:{},submitted:false};
+  ['q1','q2','q3','q4'].forEach(function(qid){
+    document.querySelectorAll('#'+qid+'o .qopt').forEach(function(o){o.classList.remove('sel','ok','bad','show-ok');});
+    const fb=document.getElementById(qid+'f'); fb.className='qfb'; fb.textContent='';
+  });
+  document.getElementById('scoreCard').classList.remove('show');
+};
+
+/* ── CONFETTI ── */
+function launchConfetti(){
+  const canvas=document.getElementById('cc');
+  canvas.style.display='block';
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  const COLS=['#FF6B6B','#FFD166','#06D6A0','#118AB2','#9B5DE5','#2EC4B6','#FF9F1C'];
+  const pieces=[];
+  for(let i=0;i<160;i++){
+    pieces.push({
+      x:Math.random()*canvas.width, y:-20-Math.random()*canvas.height*.5,
+      w:7+Math.random()*9, h:4+Math.random()*6,
+      r:Math.random()*Math.PI*2, dr:(Math.random()-.5)*.14,
+      vy:2+Math.random()*4, vx:(Math.random()-.5)*2.5,
+      col:COLS[Math.floor(Math.random()*COLS.length)], alpha:1
+    });
+  }
+  let start=null; const DUR=4200;
+  function draw(ts){
+    if(!start)start=ts;
+    const el=ts-start;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(function(p){
+      p.y+=p.vy; p.x+=p.vx; p.r+=p.dr; p.vy+=0.04;
+      if(el>DUR*.62)p.alpha=Math.max(0,p.alpha-.01);
+      ctx.save();
+      ctx.translate(p.x+p.w/2,p.y+p.h/2); ctx.rotate(p.r);
+      ctx.globalAlpha=p.alpha; ctx.fillStyle=p.col;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if(el<DUR)requestAnimationFrame(draw);
+    else{ctx.clearRect(0,0,canvas.width,canvas.height);canvas.style.display='none';}
+  }
+  requestAnimationFrame(draw);
+}
+
+})();
+</script>
+</body>
+</html>
